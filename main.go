@@ -71,10 +71,12 @@ func main() {
 		// }
 
 		var data []AppProcess
+		var result []string
 		db.Find(&data)
 		//  iterative onto the database and get all the fields or jobs having timespan less than 2 hours
 		for _, u := range data {
 			fmt.Println("User_Name", u.User, "App_ID", u.AppID, "Status", u.Status, "User_ID", u.UserID)
+			result = append(result, u.Status, strconv.Itoa(u.AppID), u.User, strconv.Itoa(u.UserID))
 			time.Sleep(1 * time.Second)
 		}
 
@@ -94,16 +96,24 @@ func main() {
 			time.Sleep(1 * time.Second)
 		}
 
+		c.JSON(200, gin.H{
+			"response_back": result,
+		})
 	})
 
 	r.GET("/:id", func(c *gin.Context) {
 		var data []AppProcess
+		var result []string
 		datasetID, _ := strconv.Atoi(c.Param("id"))
 		db.Where("user_id =?", uint(datasetID)).Find(&data)
 		fmt.Println(reflect.TypeOf(&data))
 		for _, u := range data {
 			fmt.Println("App_Id:", u.AppID, "Created_Time:", u.CreatedAt, "App_Status:", u.Status, "User_Name:", u.User)
+			result = append(result, strconv.Itoa(u.AppID), u.Status, u.User)
 		}
+		c.JSON(200, gin.H{
+			"response_back": result,
+		})
 	})
 
 	r.Run()
