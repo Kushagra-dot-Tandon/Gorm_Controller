@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"strconv"
 	"time"
 
@@ -73,7 +74,23 @@ func main() {
 		db.Find(&data)
 		//  iterative onto the database and get all the fields or jobs having timespan less than 2 hours
 		for _, u := range data {
-			fmt.Println(u.User, u.AppID, u.Status, u.UserID)
+			fmt.Println("User_Name", u.User, "App_ID", u.AppID, "Status", u.Status, "User_ID", u.UserID)
+			time.Sleep(1 * time.Second)
+		}
+
+		var user []UserDetails
+		db.Find(&user)
+		//  iterative onto the database and get all the fields or jobs having timespan less than 2 hours
+		for _, u := range user {
+			fmt.Println("User_Name", u.User, "User_ID", u.UserID, "Email", u.EmailID, "Session", u.Session)
+			time.Sleep(1 * time.Second)
+		}
+
+		var payment []Billing
+		db.Find(&payment)
+		//  iterative onto the database and get all the fields or jobs having timespan less than 2 hours
+		for _, u := range payment {
+			fmt.Println("User_ID", u.UserID, "Payment_ID", u.PaymentID, "Payment_Amount", u.PaymentAmount, "Payment_Details", u.PaymentDetails)
 			time.Sleep(1 * time.Second)
 		}
 
@@ -83,6 +100,7 @@ func main() {
 		var data []AppProcess
 		datasetID, _ := strconv.Atoi(c.Param("id"))
 		db.Where("user_id =?", uint(datasetID)).Find(&data)
+		fmt.Println(reflect.TypeOf(&data))
 		for _, u := range data {
 			fmt.Println("App_Id:", u.AppID, "Created_Time:", u.CreatedAt, "App_Status:", u.Status, "User_Name:", u.User)
 		}
