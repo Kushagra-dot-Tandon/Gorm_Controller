@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -76,6 +77,15 @@ func main() {
 			time.Sleep(1 * time.Second)
 		}
 
+	})
+
+	r.GET("/:id", func(c *gin.Context) {
+		var data []AppProcess
+		datasetID, _ := strconv.Atoi(c.Param("id"))
+		db.Where("user_id =?", uint(datasetID)).Find(&data)
+		for _, u := range data {
+			fmt.Println("App_Id:", u.AppID, "Created_Time:", u.CreatedAt, "App_Status:", u.Status, "User_Name:", u.User)
+		}
 	})
 
 	r.Run()
