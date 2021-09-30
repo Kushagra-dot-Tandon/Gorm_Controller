@@ -87,7 +87,7 @@ func main() {
 		}
 
 		var payment []Billing
-		db.Find(&payment)
+		db.Where("payment_amount > ?", 360).Find(&payment)
 		//  iterative onto the database and get all the fields or jobs having timespan less than 2 hours
 		for _, u := range payment {
 			fmt.Println("User_ID", u.UserID, "Payment_ID", u.PaymentID, "Payment_Amount", u.PaymentAmount, "Payment_Details", u.PaymentDetails)
